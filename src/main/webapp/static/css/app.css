@@ -5,9 +5,10 @@
 }
 
 .publication .category {
-	display: inline-block;
+	display: block;
+	text-align: center;
 	font-size: 0.9em;
-	margin: 12px 0 0;
+	margin: 6px 0;
 }
 
 .publication .name, 
@@ -19,6 +20,8 @@
 
 .publication .thumbnail {
 	position: relative;
+	overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .publication .desc {
@@ -264,4 +267,8 @@ li {
 	width: 38px;
 	display: inline-block;
 	border: none;
+}
+
+#loadMorePublications{
+	margin-bottom: 10px;
 }

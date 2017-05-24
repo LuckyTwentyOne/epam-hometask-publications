@@ -1,4 +1,4 @@
-package ua.kh.butov.subpub.servlets;
+package ua.kh.butov.subpub.servlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -8,15 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.kh.butov.subpub.service.PublicationService;
+import ua.kh.butov.subpub.service.SubscriptionService;
+import ua.kh.butov.subpub.service.impl.ServiceManager;
+
 public abstract class AbstractController extends HttpServlet {
 	private static final long serialVersionUID = 8233947516885878614L;
 	
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	//private ServiceManager serviceManager;
+	private ServiceManager serviceManager;
 	
 	@Override
 	public final void init() throws ServletException {
-		//serviceManager = ServiceManager.getInstance(getServletContext());
+		serviceManager = ServiceManager.getInstance(getServletContext());
 		initServlet();
 	}
 
@@ -26,6 +30,14 @@ public abstract class AbstractController extends HttpServlet {
 	@Override
 	public final void init(ServletConfig config) throws ServletException {
 		super.init(config);
+	}
+	
+	public final PublicationService getPublicationService(){
+		return serviceManager.getPublicationService();
+	}
+	
+	public final SubscriptionService getSubscriptionService(){
+		return serviceManager.getSubscriptionService();
 	}
 	
 	public final int getPageCount(int totalCount, int itemsPerPage) {
