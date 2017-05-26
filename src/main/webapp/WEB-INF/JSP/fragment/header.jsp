@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="mytags.tld" prefix="mytags"%>
 <nav class="navbar navbar-inverse ">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -14,14 +16,21 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="subpubNav">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/subpub/publications">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">My subscriptions</a></li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Change language</a></li>
-        <li><a href="#">Sigh in</a></li>
-        <li><a href="#">Sign out</a></li>
+        <li><a href="/subpub/switch"><mytags:message key="header.change-language"/></a></li> 
+        <c:choose>
+        	<c:when test="${CURRENT_ACCOUNT == null and CURRENT_REQUEST_URL == '/subpub/sign-in'}">
+			</c:when>
+			<c:when test="${CURRENT_ACCOUNT != null}">
+				<li><a><mytags:message key="header.user.info"/>&nbsp;${CURRENT_ACCOUNT.description }</a></li>
+				<li><a href="/subpub/my-subscriptions"><mytags:message key="header.my-subscriptions"/></a></li>
+				<li><a href="/subpub/my-account"><mytags:message key="header.my-account"/></a></li>
+				<li><a href="javascript:void(0);" class="post-request" data-url="/subpub/sign-out"><mytags:message key="header.sign-out"/></a></li>
+			</c:when>
+			<c:otherwise>
+			    <li><a class="sigh-in-btn">Sigh in</a></li>
+			</c:otherwise>
+        </c:choose>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

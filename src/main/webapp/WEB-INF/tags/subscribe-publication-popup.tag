@@ -1,4 +1,5 @@
 <%@ tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="subscribePublicationPopup" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -26,13 +27,20 @@
 			<p class="description"></p>
 			<h4>Subscribe conditions</h4>
 			<p class="conditions">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis cumque non pariatur rem quisquam soluta ipsam excepturi ducimus deleniti at eos obcaecati error recusandae molestias expedita atque ea. Fugiat obcaecati nulla ad veniam aliquid omnis dolor! Dicta alias saepe perferendis optio numquam placeat id dolorem a in blanditiis quis eius mollitia beatae itaque quam officiis magni nobis molestias dolore illum. Corporis eum magni eligendi doloremque earum beatae dignissimos voluptatibus. Consequatur culpa hic labore voluptatibus unde accusantium officiis. Accusamus quos fuga modi facilis sed ab asperiores quidem tempora atque explicabo esse impedit voluptas error odio dolor provident autem consequatur beatae nemo.
 			</p>
 		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="subscribe-btn" type="button" class="btn btn-primary">Subscribe</button>
+     	<a id="makeSubscription" href="javascript:void(0);" class="btn btn-primary" data-url="/subpub/subscription" data-toggle="tooltip" title="You need to register yourself!" ${CURRENT_ACCOUNT==null? 'disabled ' : '' }>Subscribe</a>
+			<c:if test="${CURRENT_ACCOUNT==null }">
+				<div class="tooltip top" role="tooltip">
+				  <div class="tooltip-arrow"></div>
+				  <div class="tooltip-inner">
+				    You need to register yourself!
+				  </div>
+				</div>
+			</c:if>
       </div>
     </div>
   </div>

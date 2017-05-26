@@ -22,6 +22,8 @@ public class AllPublicationsController extends AbstractController{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		List<Publication> publications = getPublicationService().listAllPublications(1, Constants.MAX_PUBLICATIONS_PER_HTML_PAGE);
 		req.setAttribute("publications", publications);
+		int totalCount = getPublicationService().countAllPublications();
+		req.setAttribute("pageCount", getPageCount(totalCount, Constants.MAX_PUBLICATIONS_PER_HTML_PAGE));
 		RoutingUtils.forwardToPage("publications.jsp", req, resp);
 	}
 }

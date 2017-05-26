@@ -14,6 +14,26 @@ public final class JDBCUtils {
 			return resultSetHandler.handle(rs);
 		}
 	}
+	
+	public static <T> T insert(Connection c, String sql, ResultSetHandler<T> resultSetHandler, Object... parameters) throws SQLException {
+		try (PreparedStatement ps = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			populatePreparedStatement(ps, parameters);
+			int result = ps.executeUpdate();
+			if (result != 1) {
+				throw new SQLException("Can't insert row to database. Result=" + result);
+			}
+			ResultSet rs = ps.getGeneratedKeys();
+			return resultSetHandler.handle(rs);
+		}
+	}
+	
+	public static int update (Connection c, String sql, Object... parameters) throws SQLException {
+		try (PreparedStatement ps = c.prepareStatement(sql)) {
+			populatePreparedStatement(ps, parameters);
+			int result = ps.executeUpdate();
+			return result;
+		}
+	}
 
 	private static void populatePreparedStatement(PreparedStatement ps, Object... parameters) throws SQLException {
 		if (parameters != null) {

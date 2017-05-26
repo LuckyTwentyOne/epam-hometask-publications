@@ -1,9 +1,12 @@
 package ua.kh.butov.subpub.util;
 
+import java.util.Locale;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import ua.kh.butov.subpub.Constants;
+import ua.kh.butov.subpub.model.CurrentAccount;
 
 public class SessionUtils {
 
@@ -18,7 +21,7 @@ public class SessionUtils {
 		WebUtils.setCookie(Constants.Cookie.SHOPPING_CART.getName(), cookieValue,
 				Constants.Cookie.SHOPPING_CART.getTtl(), resp);
 	}
-
+*/	
 	public static CurrentAccount getCurrentAccount(HttpServletRequest req) {
 		return (CurrentAccount) req.getSession().getAttribute(Constants.CURRENT_ACCOUNT);
 	}
@@ -30,5 +33,9 @@ public class SessionUtils {
 	public static boolean isCurrentAccountCreated(HttpServletRequest req) {
 		return getCurrentAccount(req) != null;
 	}
-*/
+
+	public static Locale getSessionLocale(HttpServletRequest req) {
+		return (Locale) req.getSession().getAttribute(Constants.SESSION_LOCALE);
+	}
+	
 }

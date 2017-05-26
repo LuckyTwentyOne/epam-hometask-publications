@@ -12,3 +12,4 @@
 	</c:if>
 </div>
 <tags:subscribe-publication-popup/>
+<tags:sign-in-popup/>

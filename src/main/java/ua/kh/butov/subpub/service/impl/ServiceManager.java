@@ -11,7 +11,10 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.kh.butov.subpub.service.AccountService;
+import ua.kh.butov.subpub.service.I18nService;
 import ua.kh.butov.subpub.service.PublicationService;
+import ua.kh.butov.subpub.service.SocialService;
 import ua.kh.butov.subpub.service.SubscriptionService;
 
 public class ServiceManager {
@@ -32,16 +35,34 @@ public class ServiceManager {
 	public SubscriptionService getSubscriptionService() {
 		return subscriptionService;
 	}
+	
+	public I18nService getI18nService() {
+		return i18nService;
+	}
+	
+	public SocialService getSocialService() {
+		return socialService;
+	}
+	
+	public AccountService getAccountService() {
+		return accountService;
+	}
 
 	private final Properties applicationProperties = new Properties();
 	private final BasicDataSource dataSource;
 	private final PublicationService publicationService;
 	private final SubscriptionService subscriptionService;
+	private final AccountService accountService;
+	private final I18nService i18nService;
+	private final SocialService socialService;
 	private ServiceManager(ServletContext context) {
 		loadApplicationProperties();
 		dataSource = createDataSource();
+		i18nService = new I18nServiceImpl();
 		publicationService = new PublicationServiceImpl(dataSource);
-		subscriptionService = new SubscriptionServiceImpl();
+		subscriptionService = new SubscriptionServiceImpl(dataSource, i18nService);
+		accountService = new AccountServiceImpl(dataSource);
+		socialService = new FacebookSocialService(this);
 	}
 	
 	public String getApplicationProperty(String key) {

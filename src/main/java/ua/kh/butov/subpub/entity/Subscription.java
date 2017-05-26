@@ -2,12 +2,13 @@ package ua.kh.butov.subpub.entity;
 
 import java.sql.Timestamp;
 
-public class Subscription {
+public class Subscription extends AbstractEntity<Long>{
+	private static final long serialVersionUID = -1434063017481118318L;
 	
 	private Integer idAccount;
 	private Timestamp created;
 	private Timestamp expirationDate;
-	private Publication publication;
+	private int idPublication;
 	
 	public Subscription() {
 	}
@@ -37,10 +38,12 @@ public class Subscription {
 	public void setExpirationDate(Timestamp expirationDate) {
 		this.expirationDate = expirationDate;
 	}
-	public Publication getPublication() {
-		return publication;
+
+	public int getIdPublication() {
+		return idPublication;
 	}
-	public void setPublication(Publication publication) {
-		this.publication = publication;
+
+	public void setIdPublication(int idPublication) {
+		this.idPublication = idPublication;
 	}
 }

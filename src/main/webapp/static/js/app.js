@@ -1,10 +1,33 @@
 ;$(function(){
 	var init = function(){
 		initBuyBtn();
+		$('.sigh-in-btn').click(showLoginPopup);
 		$('#subscribe-btn').click(submitSubscription);
 		$('#subscribePublicationPopup .count').change(calculateCost);
 		$('#loadMorePublications').click(loadMorePublications);
+		$('[data-toggle="tooltip"]').tooltip();
+		$('#sign-in-email, #sign-in-password, #registration-email, #registration-first-name, #registration-conf-password, #registration-last-name, #registration-password').unbind().blur(validateForm);
+		$('.post-request').click(function(){
+			postRequest($(this).attr('data-url'));
+		});
+		$('#makeSubscription').click(function(){
+			makeSubscription($(this).attr('data-url'));
+		});
 	};
+	
+	var postRequest = function(url){
+		var form = '<form id="postRequestForm" action="'+url+'" method="post"></form>';
+		$('body').append(form);
+		$('#postRequestForm').submit();
+	};
+	
+	var makeSubscription = function(url) {
+		var idPublication = $('#subscribePublicationPopup').attr('data-id-publication');
+		var numberOfMonthes = $('#subscribePublicationPopup .count').val();
+		var form = '<form id="makeSubscriptionForm" action="'+url+'" method="post"><input type="hidden" name="idPublication" value="'+idPublication+'"></input><input type="hidden" name="numberOfMonthes" value="'+numberOfMonthes+'"></input></form>';
+		$('body').append(form);
+		$('#makeSubscriptionForm').submit();
+	}
 	
 	var showSubscribePublicationPopup = function(){
 		var idPublication = $(this).attr('data-id-publication');
@@ -23,6 +46,13 @@
 			show:true
 		});
 	};
+	
+	var showLoginPopup = function(){
+		$('#sighinPopup').modal({
+			show:true
+		});
+	};
+	
 	var initBuyBtn = function() {
 		$('.buy-btn').click(showSubscribePublicationPopup)
 	};
@@ -104,6 +134,10 @@
 				pageNumber++;
 				var pageCount = parseInt($('#publicationList').attr('data-page-count'));
 				$('#publicationList').attr('data-page-number', pageNumber);
+				$('#loadMorePublications').focus();
+				$('html, body').animate({
+					scrollTop : $('#loadMorePublications').offset().top
+				}, 2000);
 				if(pageNumber < pageCount) {
 					convertLoaderToButton(btn, 'btn-success', loadMorePublications);
 				} else {
@@ -151,6 +185,119 @@
 			}
 		});
 	};
+	
+	var validateForm = function() {
+		var id = $(this).attr('id');
+        var val = $(this).val();
+        switch(id)
+        {
+              case 'sign-in-email':
+            	  var pattern_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+                  if(val != '' && pattern_email.test(val))
+                  {
+                	  $('#sign-in-email-input').removeClass('has-error');
+                	  $('#sign-in-email-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#sign-in-email-input').addClass('has-error');
+                	  $('#sign-in-email').val('');
+                	  $('#sign-in-email').attr('placeholder', 'Incorrect format')
+                  }
+                  break;
+                  
+              case 'registration-email':
+            	  var pattern_email = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+                  if(val != '' && pattern_email.test(val))
+                  {
+                	  $('#registration-email-input').removeClass('has-error');
+                	  $('#registration-email-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#registration-email-input').addClass('has-error');
+                	  $('#registration-email').val('');
+                	  $('#registration-email').attr('placeholder', 'Incorrect format')
+                  }
+                  break;
+              
+              case 'sign-in-password':
+            	  var pattern_password = /^[a-zA-Zа-яА-Я0-9]+$/;
+            	  if(val.length > 6 && val.length < 30 && val != '' && pattern_password.test(val))
+            	  {
+            		  $('#sign-in-password-input').removeClass('has-error');
+                	  $('#sign-in-password-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#sign-in-password-input').addClass('has-error');
+                	  $('#sign-in-password').val('');
+                	  $('#sign-in-password').attr('placeholder', 'Incorrect password format')
+                  }
+            	  break;
+            	  
+              case 'registration-first-name':
+            	  var pattern_name = /^[a-zA-Zа-яА-Я0-9]+$/;
+            	  if(val.length > 2 && val.length < 30 && val != '' && pattern_name.test(val))
+            	  {
+            		  $('#registration-first-name-input').removeClass('has-error');
+                	  $('#registration-first-name-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#registration-first-name-input').addClass('has-error');
+                	  $('#registration-first-name').val('');
+                	  $('#registration-first-name').attr('placeholder', 'Incorrect name format')
+                  }
+            	  break;
+            	  
+              case 'registration-last-name':
+            	  var pattern_name = /^[a-zA-Zа-яА-Я0-9]+$/;
+            	  if(val.length > 2 && val.length < 30 && val != '' && pattern_name.test(val))
+            	  {
+            		  $('#registration-last-name-input').removeClass('has-error');
+                	  $('#registration-last-name-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#registration-last-name-input').addClass('has-error');
+                	  $('#registration-last-name').val('');
+                	  $('#registration-last-name').attr('placeholder', 'Incorrect last-name format')
+                  }
+            	  break;
+            	  
+              case 'registration-password':
+            	  var pattern_password = /^[a-zA-Zа-яА-Я0-9]+$/;
+            	  if(val.length > 6 && val.length < 30 && val != '' && pattern_password.test(val))
+            	  {
+            		  $('#registration-password-input').removeClass('has-error');
+                	  $('#registration-password-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#registration-password-input').addClass('has-error');
+                	  $('#registration-password').val('');
+                	  $('#registration-password').attr('placeholder', 'Incorrect password format')
+                  }
+            	  break;
+            	  
+              case 'registration-conf-password':
+            	  var password = $('#registration-password').val();
+            	  alert(password);
+            	  if(val==password)
+            	  {
+            		  $('#registration-conf-password-input').removeClass('has-error');
+                	  $('#registration-conf-password-input').addClass('has-success');
+                  }
+                  else
+                  {
+                	  $('#registration-conf-password-input').addClass('has-error');
+                	  $('#registration-conf-password').val('');
+                	  $('#registration-conf-password').attr('placeholder', 'Passwords do not match');
+                  }
+            	  break;
+        }
+	}
 	
 	init();
 });

@@ -2,10 +2,13 @@ package ua.kh.butov.subpub.entity;
 
 import java.math.BigDecimal;
 
-public class Account extends AbstractEntity<Integer>{
+import ua.kh.butov.subpub.model.CurrentAccount;
+
+public class Account extends AbstractEntity<Integer> implements CurrentAccount{
 	private static final long serialVersionUID = -6889352515111174105L;
 
-	private String name;
+	private String fistName;
+	private String lastName;
 	private String email;
 	private String password;
 	private String role;
@@ -13,20 +16,39 @@ public class Account extends AbstractEntity<Integer>{
 
 	public Account() {
 	}
-	public Account(String name, String email, String password, String role, BigDecimal money) {
-		this.name = name;
+	
+	public Account(String fistName, String lastName, String email, String password, String role, BigDecimal money) {
+		super();
+		this.fistName = fistName;
+		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.role = role;
 		this.money = money;
 	}
-
-	public String getName() {
-		return name;
+	
+	public Account(String fistName, String lastName, String email) {
+		super();
+		this.fistName = fistName;
+		this.lastName = lastName;
+		this.email = email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getFistName() {
+		return fistName;
+	}
+
+
+	public void setFistName(String fistName) {
+		this.fistName = fistName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -59,5 +81,9 @@ public class Account extends AbstractEntity<Integer>{
 
 	public void setMoney(BigDecimal money) {
 		this.money = money;
+	}
+	@Override
+	public String getDescription() {
+		return lastName+" "+fistName+" ("+money.toString()+"$)";
 	}
 }

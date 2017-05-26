@@ -1,6 +1,5 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="ishop" tagdir="/WEB-INF/tags"%>
 <div id="subscription">
 	<c:if test="${CURRENT_MESSAGE != null }">
 		<div class="alert alert-success hidden-print" role="alert">${CURRENT_MESSAGE }</div>

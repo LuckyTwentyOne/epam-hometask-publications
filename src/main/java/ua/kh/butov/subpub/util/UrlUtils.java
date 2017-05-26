@@ -21,6 +21,10 @@ public class UrlUtils {
 	public static boolean isMediaUrl(String url) {
 		return url.startsWith("/subpub/media/");
 	}
+	
+	public static boolean isSwitchUrl(String url) {
+		return url.startsWith("/subpub/switch");
+	}
 
 	private UrlUtils() {
 	}

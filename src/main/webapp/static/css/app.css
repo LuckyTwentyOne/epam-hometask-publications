@@ -249,7 +249,7 @@ li {
 }
 
 @media (min-width: 767px) {
-	#subjects,
+	#categories,
 	#searchForm {
 		display: block;
 	}
@@ -271,4 +271,15 @@ li {
 
 #loadMorePublications{
 	margin-bottom: 10px;
+}
+
+.registration-btn {
+	margin-bottom: 10px;
+}
+
+#facebook-sign-in-form {
+	display: inline-block;
+}
+.clear {
+	clear: both;
 }
