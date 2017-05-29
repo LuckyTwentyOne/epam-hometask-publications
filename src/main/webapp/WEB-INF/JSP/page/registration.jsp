@@ -1,9 +1,12 @@
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="mytags.tld" prefix="mytags"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <h4 class="text-center"><mytags:message key="registration.registration" /></h4>
 <hr />
+<c:if test="${UNSUCCESS_MESSAGE != null }">
+	<div class="alert alert-danger hidden-print" role="alert">${UNSUCCESS_MESSAGE }</div>
+</c:if>
 <form action="/subpub/registration" method="post">
 	<div id="registration-first-name-input" class="form-group">
 		<label><mytags:message key="registration.firstName" /></label>
@@ -25,10 +28,6 @@
 		<label><mytags:message key="registration.confirmPassword" /></label> 
 		<input id="registration-conf-password" maxlength="25" name="confirmPassword" type="password" class="form-control" placeholder="<mytags:message key="registration.confirmPassword"/>">
 	</div>
-
-	<c:if test="${registrationErrorMessage!=null }">
-		<div class="alert alert-danger" role="alert">${registrationErrorMessage }</div>
-	</c:if>
 	<div class="text-center">
 		<button type="submit" class="btn btn-default registration-btn">
 			<mytags:message key="registration.submit" />

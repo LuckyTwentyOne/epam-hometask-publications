@@ -6,25 +6,20 @@
 	<mytags:message key="sign-in.sign-in" />
 </h4>
 <hr />
-<form class="form-horizontal col-md-10 col-md-offset-1">
+<c:if test="${UNSUCCESS_MESSAGE != null }">
+	<div class="alert alert-danger hidden-print" role="alert">${UNSUCCESS_MESSAGE }</div>
+</c:if>
+<form action="/subpub/sign-in" class="form-horizontal col-md-10 col-md-offset-1" method="post">
 	<div id="sign-in-email-input" class="form-group">
 		<label class="col-sm-2 control-label">Email</label>
 		<div class="col-sm-10">
-			<input type="email" class="form-control" id="sign-in-email" placeholder="Email">
+			<input type="email" class="form-control" name="email" id="sign-in-email" value="${form.email }" placeholder="Email">
 		</div>
 	</div>
 	<div id="sign-in-password-input" class="form-group">
 		<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
 		<div class="col-sm-10">
-			<input type="password" class="form-control" id="sign-in-password" placeholder="Password">
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<div class="checkbox">
-				<label> <input type="checkbox"> Remember me
-				</label>
-			</div>
+			<input type="password" class="form-control" name="password" id="sign-in-password" placeholder="Password">
 		</div>
 	</div>
 	<div class="form-group">

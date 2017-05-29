@@ -1,45 +1,93 @@
 package ua.kh.butov.subpub.service.impl;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.util.List;
 
-import javax.sql.DataSource;
-
+import ua.kh.butov.subpub.annotation.jdbc.Transactional;
 import ua.kh.butov.subpub.entity.Account;
-import ua.kh.butov.subpub.exception.InternalServerErrorException;
-import ua.kh.butov.subpub.jdbc.JDBCUtils;
-import ua.kh.butov.subpub.jdbc.ResultSetHandler;
-import ua.kh.butov.subpub.jdbc.ResultSetHandlerFactory;
+import ua.kh.butov.subpub.entity.Voucher;
+import ua.kh.butov.subpub.exception.ValidationException;
+import ua.kh.butov.subpub.form.LoginForm;
 import ua.kh.butov.subpub.model.CurrentAccount;
 import ua.kh.butov.subpub.model.SocialAccount;
+import ua.kh.butov.subpub.repository.AccountRepository;
+import ua.kh.butov.subpub.repository.VoucherRepository;
 import ua.kh.butov.subpub.service.AccountService;
 
 public class AccountServiceImpl implements AccountService {
-	private static final ResultSetHandler<Account> accountResultSetHandler = ResultSetHandlerFactory
-			.getSingleResultSetHandler(ResultSetHandlerFactory.ACCOUNT_RESULT_SET_HANDLER);
-	private final DataSource dataSource;
 
-	public AccountServiceImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
+	private final AccountRepository accountRepository;
+	private final VoucherRepository vaucherRepository;
+
+	public AccountServiceImpl(ServiceManager serviceManager) {
+		accountRepository = serviceManager.accountRepository;
+		vaucherRepository = serviceManager.vaucherRepository;
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public CurrentAccount authentificate(SocialAccount socialAccount) {
-		try (Connection c = dataSource.getConnection()) {
-			Account account = JDBCUtils.select(c, "select * from account where email=?",
-					accountResultSetHandler, socialAccount.getEmail());
-			if (account == null) {
-				account = new Account(socialAccount.getFirstName(), socialAccount.getLastName(),
-						socialAccount.getEmail());
-				account = JDBCUtils.insert(c,
-						"insert into account (id, first_name, last_name, email) values (nextval('account_seq'),?,?,?)",
-						accountResultSetHandler, account.getFistName(), account.getLastName(), account.getEmail());
-				c.commit();
-			}
-			return account;
-		} catch (SQLException e) {
-			throw new InternalServerErrorException("Can't execute sql query: " + e.getMessage(), e);
+		Account account = accountRepository.findByEmail(socialAccount.getEmail());
+		if (account == null) {
+			account = new Account(socialAccount.getFirstName(), socialAccount.getLastName(), socialAccount.getEmail());
+			accountRepository.create(account);
 		}
+		return account;
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public CurrentAccount registrateAccount(Account account) throws ValidationException {
+		if (accountRepository.findByEmail(account.getEmail()) != null) {
+			throw new ValidationException("registration.account.exist");
+		}
+		accountRepository.create(account);
+		return account;
+	}
+
+	@Override
+	@Transactional
+	public CurrentAccount login(LoginForm form) throws ValidationException {
+		Account account = accountRepository.findByEmail(form.getEmail());
+		if (account == null) {
+			throw new ValidationException("login.validation-error.email");
+		}
+		if (!account.getPassword().equals(form.getPassword())) {
+			throw new ValidationException("login.validation-error.password");
+		}
+		if (!account.isActive()) {
+			throw new ValidationException("login.validation-error.active");
+		}
+		return account;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void addMoneyToAccountByVaucher(CurrentAccount currentAccount, Long voucherCode) throws ValidationException {
+		Voucher voucher = vaucherRepository.findByCode(voucherCode);
+		if (voucher == null || voucher.getActive() == false) {
+			throw new ValidationException("Vaucher not found by code");
+		}
+		vaucherRepository.deactivateVaucher(voucher);
+		BigDecimal newBalance = accountRepository.addMoneyToAccount(currentAccount.getId(), voucher.getValue());
+		currentAccount.setMoney(newBalance);
+	}
+
+	@Override
+	@Transactional
+	public List<Account> listAllAccounts(int page, int limit) {
+		return accountRepository.listAllAccounts(page, limit);
+	}
+
+	@Override
+	@Transactional
+	public int countAllAccounts() {
+		return accountRepository.countAllAccounts();
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public void changeAccountStatus(int idAccount) {
+		accountRepository.changeActiveStatus(idAccount);
+	}
 }

@@ -2,9 +2,9 @@
 	var init = function(){
 		initBuyBtn();
 		$('.sigh-in-btn').click(showLoginPopup);
-		$('#subscribe-btn').click(submitSubscription);
 		$('#subscribePublicationPopup .count').change(calculateCost);
 		$('#loadMorePublications').click(loadMorePublications);
+		$('#loadMoreSubscriptions').click(loadMoreSubscriptions);
 		$('[data-toggle="tooltip"]').tooltip();
 		$('#sign-in-email, #sign-in-password, #registration-email, #registration-first-name, #registration-conf-password, #registration-last-name, #registration-password').unbind().blur(validateForm);
 		$('.post-request').click(function(){
@@ -55,36 +55,6 @@
 	
 	var initBuyBtn = function() {
 		$('.buy-btn').click(showSubscribePublicationPopup)
-	};
-	
-	var submitSubscription = function(){
-		var idPublication = $('#subscribePublicationPopup').attr('data-id-publication');
-		var count = $('#subscribePublicationPopup .count').val();
-		var totalCost = $('#subscribePublicationPopup .cost').text();
-		var btn = $('#subscribe-btn');
-		convertButtonToLoader(btn, 'btn-primary');
-		$.ajax({
-			url : '/iShop/ajax/json/subscribe',
-			method : 'POST',
-			data : {
-				idPublication : idPublication,
-				count : count,
-				totalCost: totalCost
-			},
-			success : function(data) {
-				alert('Successfull subscription');
-				$('#addProductPopup').modal('hide');
-				convertLoaderToButton(btn, 'btn-primary', submitSubscription);
-			},
-			error : function(xhr) {
-				convertLoaderToButton(btn, 'btn-primary', submitSubscription);
-				if (xhr.status == 400) {
-					alert(xhr.responseJSON.message);
-				} else {
-					alert('Error');
-				}
-			}
-		});
 	};
 	
 	var calculateCost = function(){
@@ -149,6 +119,36 @@
 			error : function(data) {
 				convertLoaderToButton(btn, 'btn-success', loadMorePublications);
 				alert('Error');
+			}
+		});
+	};
+	
+	var loadMoreSubscriptions = function (){
+		var btn = $('#loadMoreSubscriptions');
+		convertButtonToLoader(btn, 'btn-success');
+		var pageNumber = parseInt($('#subscriptionList').attr('data-page-number'));
+		var url = '/subpub/ajax/html/more/subscriptions?page=' + (pageNumber+1);
+		$.ajax({
+			url : url,
+			success : function(html) {
+				$('#subscriptionList tbody').append(html);
+				pageNumber++;
+				var pageCount = parseInt($('#subscriptionList').attr('data-page-count'));
+				$('#subscriptionList').attr('data-page-number', pageNumber);
+				if(pageNumber < pageCount) {
+					convertLoaderToButton(btn, 'btn-success', loadMoreSubscriptions);
+				} else {
+					btn.remove();
+				}
+				
+			},
+			error : function(xhr) {
+				convertLoaderToButton(btn, 'btn-success', loadMoreSubscriptions);
+				if (xhr.status == 401) {
+					window.location.href = '/subpub/sign-in';
+				} else {
+					alert('Error');
+				}
 			}
 		});
 	};
@@ -283,7 +283,6 @@
             	  
               case 'registration-conf-password':
             	  var password = $('#registration-password').val();
-            	  alert(password);
             	  if(val==password)
             	  {
             		  $('#registration-conf-password-input').removeClass('has-error');

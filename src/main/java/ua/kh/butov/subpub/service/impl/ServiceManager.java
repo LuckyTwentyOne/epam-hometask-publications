@@ -11,14 +11,28 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ua.kh.butov.subpub.factory.JDBCTransactionalServiceFactory;
+import ua.kh.butov.subpub.repository.AccountRepository;
+import ua.kh.butov.subpub.repository.CategoryRepository;
+import ua.kh.butov.subpub.repository.PublicationRepository;
+import ua.kh.butov.subpub.repository.SubscriptionRepository;
+import ua.kh.butov.subpub.repository.VoucherRepository;
+import ua.kh.butov.subpub.repository.impl.AccountRepositoryImpl;
+import ua.kh.butov.subpub.repository.impl.CategoryRepositoryImpl;
+import ua.kh.butov.subpub.repository.impl.PublicationRepositoryImpl;
+import ua.kh.butov.subpub.repository.impl.SubscriptionRepositoryImpl;
+import ua.kh.butov.subpub.repository.impl.VoucherRepositoryImpl;
 import ua.kh.butov.subpub.service.AccountService;
 import ua.kh.butov.subpub.service.I18nService;
+import ua.kh.butov.subpub.service.NotificationContentBuilderService;
+import ua.kh.butov.subpub.service.NotificationService;
 import ua.kh.butov.subpub.service.PublicationService;
 import ua.kh.butov.subpub.service.SocialService;
 import ua.kh.butov.subpub.service.SubscriptionService;
 
 public class ServiceManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceManager.class);
+
 	public static ServiceManager getInstance(ServletContext context) {
 		ServiceManager instance = (ServiceManager) context.getAttribute("SERVICE_MANAGER");
 		if (instance == null) {
@@ -27,7 +41,7 @@ public class ServiceManager {
 		}
 		return instance;
 	}
-	
+
 	public PublicationService getPublicationService() {
 		return publicationService;
 	}
@@ -35,17 +49,25 @@ public class ServiceManager {
 	public SubscriptionService getSubscriptionService() {
 		return subscriptionService;
 	}
-	
+
 	public I18nService getI18nService() {
 		return i18nService;
 	}
-	
+
 	public SocialService getSocialService() {
 		return socialService;
 	}
-	
+
 	public AccountService getAccountService() {
 		return accountService;
+	}
+	
+	public NotificationService getNotificationService() {
+		return notificationService;
+	}
+	
+	public NotificationContentBuilderService getNotificationContentBuilderService() {
+		return notificationContentBuilderService;
 	}
 
 	private final Properties applicationProperties = new Properties();
@@ -55,16 +77,35 @@ public class ServiceManager {
 	private final AccountService accountService;
 	private final I18nService i18nService;
 	private final SocialService socialService;
+	private final NotificationService notificationService;
+	private final NotificationContentBuilderService notificationContentBuilderService;
+	
+	final PublicationRepository publicationRepository;
+	final CategoryRepository categoryRepository;
+	final SubscriptionRepository subscriptionRepository;
+	final AccountRepository accountRepository;
+	final VoucherRepository vaucherRepository;
+
 	private ServiceManager(ServletContext context) {
 		loadApplicationProperties();
 		dataSource = createDataSource();
 		i18nService = new I18nServiceImpl();
-		publicationService = new PublicationServiceImpl(dataSource);
-		subscriptionService = new SubscriptionServiceImpl(dataSource, i18nService);
-		accountService = new AccountServiceImpl(dataSource);
+		notificationService = new AsyncEmailNotificationService(this);
+		notificationContentBuilderService = new NotificationContentBuilderServiceImpl(this);
+		publicationRepository = new PublicationRepositoryImpl();
+		categoryRepository = new CategoryRepositoryImpl();
+		subscriptionRepository = new SubscriptionRepositoryImpl();
+		accountRepository = new AccountRepositoryImpl();
+		vaucherRepository = new VoucherRepositoryImpl();
+		publicationService = (PublicationService) JDBCTransactionalServiceFactory.createTransactionalService(dataSource,
+				new PublicationServiceImpl(this));
+		subscriptionService = (SubscriptionService) JDBCTransactionalServiceFactory
+				.createTransactionalService(dataSource, new SubscriptionServiceImpl(this));
+		accountService = (AccountService) JDBCTransactionalServiceFactory.createTransactionalService(dataSource,
+				new AccountServiceImpl(this));
 		socialService = new FacebookSocialService(this);
 	}
-	
+
 	public String getApplicationProperty(String key) {
 		String value = applicationProperties.getProperty(key);
 		if (value.startsWith("${sysEnv.")) {
@@ -77,6 +118,7 @@ public class ServiceManager {
 	public void close() {
 		try {
 			dataSource.close();
+			notificationService.close();
 		} catch (SQLException e) {
 			LOGGER.error("Close datasource failed: " + e.getMessage(), e);
 		}

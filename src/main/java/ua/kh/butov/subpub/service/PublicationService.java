@@ -4,6 +4,7 @@ import java.util.List;
 
 import ua.kh.butov.subpub.entity.Category;
 import ua.kh.butov.subpub.entity.Publication;
+import ua.kh.butov.subpub.form.AddEditPublicationForm;
 import ua.kh.butov.subpub.form.SearchForm;
 
 public interface PublicationService {
@@ -23,5 +24,13 @@ public interface PublicationService {
 	int countPublicationsBySearchForm(SearchForm searchForm);
 	
 	Publication findById(int idPublication);
+	
+	void deletePublication(int idPublication);
+	
+	void updatePublication(AddEditPublicationForm form);
+	
+	Publication createNewPublication(AddEditPublicationForm form);
+	
+	void countPublicationsPerCategory();
 
 }

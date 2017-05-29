@@ -60,16 +60,16 @@ public class RegistrationForm extends AbstractForm {
 	@Override
 	public void validate(I18nService i18nService) throws ValidationException {
 		if(!EmailValidator.getInstance().isValid(email)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.email", getLocale()));
+			throw new ValidationException("form.invalid.email");
 		}
 		if(StringUtils.isBlank(password)||StringUtils.isBlank(confirmPassword)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.password", getLocale()));
+			throw new ValidationException("form.invalid.password");
 		}
 		if(StringUtils.isBlank(firstName)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.firstName", getLocale()));
+			throw new ValidationException("form.invalid.firstName");
 		}
 		if(StringUtils.isBlank(lastName)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.lastName", getLocale()));
+			throw new ValidationException("form.invalid.lastName");
 		}
 	}
 }

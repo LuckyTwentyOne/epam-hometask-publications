@@ -32,15 +32,14 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-     	<a id="makeSubscription" href="javascript:void(0);" class="btn btn-primary" data-url="/subpub/subscription" data-toggle="tooltip" title="You need to register yourself!" ${CURRENT_ACCOUNT==null? 'disabled ' : '' }>Subscribe</a>
-			<c:if test="${CURRENT_ACCOUNT==null }">
-				<div class="tooltip top" role="tooltip">
-				  <div class="tooltip-arrow"></div>
-				  <div class="tooltip-inner">
-				    You need to register yourself!
-				  </div>
-				</div>
-			</c:if>
+        <c:choose>
+        	<c:when test="${CURRENT_ACCOUNT!=null }">
+     			<a id="makeSubscription" href="javascript:void(0);" class="btn btn-primary" data-url="/subpub/subscription">Subscribe</a>
+     		</c:when>
+     		<c:otherwise>
+     			<a href="/subpub/sign-in" class="btn btn-primary">Sigh in</a>
+     		</c:otherwise>
+ 		 </c:choose>
       </div>
     </div>
   </div>

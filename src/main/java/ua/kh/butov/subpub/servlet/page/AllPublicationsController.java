@@ -20,6 +20,9 @@ public class AllPublicationsController extends AbstractController{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String message = (String) req.getSession().getAttribute("CURRENT_MESSAGE");
+		req.getSession().removeAttribute("CURRENT_MESSAGE");
+		req.setAttribute("CURRENT_MESSAGE", message);
 		List<Publication> publications = getPublicationService().listAllPublications(1, Constants.MAX_PUBLICATIONS_PER_HTML_PAGE);
 		req.setAttribute("publications", publications);
 		int totalCount = getPublicationService().countAllPublications();

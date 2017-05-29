@@ -27,10 +27,10 @@ public class LoginForm extends AbstractForm{
 	@Override
 	public void validate(I18nService i18nService) throws ValidationException {
 		if(!EmailValidator.getInstance().isValid(email)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.email", getLocale()));
+			throw new ValidationException("form.invalid.email");
 		}
 		if(StringUtils.isBlank(password)) {
-			throw new ValidationException(i18nService.getMessage("form.invalid.password", getLocale()));
+			throw new ValidationException("form.invalid.password");
 		}
 	}
 }

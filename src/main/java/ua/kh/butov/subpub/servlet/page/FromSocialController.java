@@ -24,14 +24,10 @@ public class FromSocialController extends AbstractController {
 			SocialAccount socialAccount = getSocialService().getSocialAccount(code);
 			CurrentAccount currentAccount = getAccountService().authentificate(socialAccount);
 			SessionUtils.setCurrentAccount(req, currentAccount);
-			redirectToSuccessPage(req, resp);
+			RoutingUtils.redirect("/subpub/my-subscriptions", req, resp);
 		} else {
 			LOGGER.warn("Parameter code not found");
 			RoutingUtils.redirect("/subpub/publications", req, resp);
 		}
-	}
-	
-	protected void redirectToSuccessPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-			RoutingUtils.redirect("/subpub/my-subscriptions", req, resp);
 	}
 }

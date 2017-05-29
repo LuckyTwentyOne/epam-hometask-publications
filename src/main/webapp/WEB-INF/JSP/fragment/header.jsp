@@ -21,10 +21,15 @@
         <c:choose>
         	<c:when test="${CURRENT_ACCOUNT == null and CURRENT_REQUEST_URL == '/subpub/sign-in'}">
 			</c:when>
-			<c:when test="${CURRENT_ACCOUNT != null}">
+			<c:when test="${CURRENT_ACCOUNT != null and CURRENT_ACCOUNT.role=='reader'}">
 				<li><a><mytags:message key="header.user.info"/>&nbsp;${CURRENT_ACCOUNT.description }</a></li>
 				<li><a href="/subpub/my-subscriptions"><mytags:message key="header.my-subscriptions"/></a></li>
-				<li><a href="/subpub/my-account"><mytags:message key="header.my-account"/></a></li>
+				<li><a href="/subpub/my-balance"><mytags:message key="header.my-account"/></a></li>
+				<li><a href="javascript:void(0);" class="post-request" data-url="/subpub/sign-out"><mytags:message key="header.sign-out"/></a></li>
+			</c:when>
+			<c:when test="${CURRENT_ACCOUNT != null and CURRENT_ACCOUNT.role=='admin'}">
+				<li><a><mytags:message key="header.user.info"/>&nbsp;${CURRENT_ACCOUNT.role }</a></li>
+				<li><a href="/subpub/admin/accounts"><mytags:message key="header.admin.accounts"/></a></li>
 				<li><a href="javascript:void(0);" class="post-request" data-url="/subpub/sign-out"><mytags:message key="header.sign-out"/></a></li>
 			</c:when>
 			<c:otherwise>

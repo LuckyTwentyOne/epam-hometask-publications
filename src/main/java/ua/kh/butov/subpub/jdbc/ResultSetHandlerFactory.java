@@ -9,6 +9,7 @@ import ua.kh.butov.subpub.entity.Account;
 import ua.kh.butov.subpub.entity.Category;
 import ua.kh.butov.subpub.entity.Publication;
 import ua.kh.butov.subpub.entity.Subscription;
+import ua.kh.butov.subpub.handler.ResultSetHandler;
 
 public final class ResultSetHandlerFactory {
 
@@ -45,7 +46,7 @@ public final class ResultSetHandlerFactory {
 			Account a = new Account();
 			a.setId(rs.getInt("id"));
 			a.setEmail(rs.getString("email"));
-			a.setFistName(rs.getString("first_name"));
+			a.setFirstName(rs.getString("first_name"));
 			a.setLastName(rs.getString("last_name"));
 			a.setPassword(rs.getString("password"));
 			if(rs.getInt("id_role")==0){

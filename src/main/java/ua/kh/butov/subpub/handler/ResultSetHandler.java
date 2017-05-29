@@ -1,4 +1,4 @@
-package ua.kh.butov.subpub.jdbc;
+package ua.kh.butov.subpub.handler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

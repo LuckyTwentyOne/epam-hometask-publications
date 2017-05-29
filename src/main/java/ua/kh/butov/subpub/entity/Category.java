@@ -1,11 +1,15 @@
 package ua.kh.butov.subpub.entity;
 
+import ua.kh.butov.subpub.annotation.jdbc.Column;
+
 public class Category extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 4750809220016947998L;
 	
 	private String name;
 	private String url;
+	@Column("publication_count")
 	private Integer publicationCount;
+	
 	public String getName() {
 		return name;
 	}

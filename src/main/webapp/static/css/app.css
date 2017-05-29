@@ -283,3 +283,7 @@ li {
 .clear {
 	clear: both;
 }
+
+#add-publication-btn{
+	margin-bottom: 15px;
+}

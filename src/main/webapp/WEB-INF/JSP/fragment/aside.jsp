@@ -11,3 +11,6 @@
 <!-- Categories -->
 <tags:category-list/>
 <!-- /Categories -->
+<c:if test="${CURRENT_ACCOUNT.role=='admin' }">
+	<a href="/subpub/admin/addPublication" id="add-publication-btn" class="btn btn-success btn-block">Add publication</a>
+</c:if>

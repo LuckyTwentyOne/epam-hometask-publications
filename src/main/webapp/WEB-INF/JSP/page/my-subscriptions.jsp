@@ -6,8 +6,8 @@
 	<thead>
 		<tr>
 			<th>Subscription id</th>
-			<th>Subscription name</th>
-			<th>Date</th>
+			<th>Subscription date</th>
+			<th>Expiration date</th>
 		</tr>
 	</thead>
 	<tbody>

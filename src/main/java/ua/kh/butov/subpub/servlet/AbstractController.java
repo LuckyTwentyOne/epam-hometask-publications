@@ -1,6 +1,7 @@
 package ua.kh.butov.subpub.servlet;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 import javax.servlet.ServletConfig;
@@ -8,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +93,7 @@ public abstract class AbstractController extends HttpServlet {
 	
 	public final <T extends AbstractForm> T createForm(HttpServletRequest req, Class<T> formClass) throws ServletException {
 		try {
-			T form = formClass.newInstance();
+			T form = createForm(formClass, req);
 			Locale locale = null;
 			if (SessionUtils.getSessionLocale(req) == null) {
 				locale = Locale.getDefault();
@@ -101,10 +101,45 @@ public abstract class AbstractController extends HttpServlet {
 				locale = SessionUtils.getSessionLocale(req);
 			}
 			form.setLocale(locale);
-			BeanUtils.populate(form, req.getParameterMap());
 			return form;
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new ApplicationException("Can't create form "+formClass+" for request: "+e.getMessage(), e);
+		}
+	}
+	
+	private <T> T createForm(Class<T> formClass, HttpServletRequest req) throws UnsupportedEncodingException {
+		try {
+			T form = formClass.newInstance();
+			Field[] fields = formClass.getDeclaredFields();
+			for (Field field : fields) {
+				field.setAccessible(true);
+				String value = new String(req.getParameter(field.getName()).getBytes("ISO-8859-1"),"UTF-8");
+				if (value != null) {
+					Object convertedValue = convert(field.getType(), value);
+					field.set(form, convertedValue);
+				}
+			}
+			return form;
+		} catch (InstantiationException | IllegalAccessException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Object convert(Class<?> type, String value) {
+		if (type == String.class) {
+			return value;
+		} else if (type == Integer.TYPE) {
+			if(value.equals("")){
+				return Integer.parseInt("0");
+			}else{
+				return Integer.parseInt(value);
+			}
+		} else if (type == Boolean.TYPE) {
+			return value != null;
+		} else if (type == Long.class) {
+			return Long.parseLong(value);
+		} else {
+			throw new IllegalArgumentException("Can't convert to " + type);
 		}
 	}
 }

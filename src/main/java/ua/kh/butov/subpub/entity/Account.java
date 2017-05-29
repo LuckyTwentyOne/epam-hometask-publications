@@ -2,45 +2,56 @@ package ua.kh.butov.subpub.entity;
 
 import java.math.BigDecimal;
 
+import ua.kh.butov.subpub.annotation.jdbc.Column;
 import ua.kh.butov.subpub.model.CurrentAccount;
 
-public class Account extends AbstractEntity<Integer> implements CurrentAccount{
+public class Account extends AbstractEntity<Integer> implements CurrentAccount {
 	private static final long serialVersionUID = -6889352515111174105L;
 
-	private String fistName;
+	@Column("first_name")
+	private String firstName;
+	@Column("last_name")
 	private String lastName;
 	private String email;
-	private String password;
+	private String password = "password";
 	private String role;
 	private BigDecimal money;
+	private Boolean active;
 
 	public Account() {
+		money = BigDecimal.ZERO;
+		role = "reader";
 	}
-	
-	public Account(String fistName, String lastName, String email, String password, String role, BigDecimal money) {
-		super();
-		this.fistName = fistName;
+
+	public Account(String firstName, String lastName, String email, String password) {
+		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		this.role = role;
-		this.money = money;
+		money = BigDecimal.ZERO;
+		role = "reader";
 	}
-	
-	public Account(String fistName, String lastName, String email) {
+
+	public Account(String firstName, String lastName, String email) {
 		super();
-		this.fistName = fistName;
+		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		money = BigDecimal.ZERO;
+		role = "reader";
+	}
+	
+	public Account(String role) {
+		super();
+		this.role = role;
 	}
 
-	public String getFistName() {
-		return fistName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-
-	public void setFistName(String fistName) {
-		this.fistName = fistName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getLastName() {
@@ -82,8 +93,21 @@ public class Account extends AbstractEntity<Integer> implements CurrentAccount{
 	public void setMoney(BigDecimal money) {
 		this.money = money;
 	}
+
+	public Boolean isActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+
 	@Override
 	public String getDescription() {
-		return lastName+" "+fistName+" ("+money.toString()+"$)";
+		return lastName + " " + firstName + " (" + money.toString() + "$)";
 	}
 }

@@ -2,10 +2,10 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-5 columns">
 		<p class="logo">
-			<i class="fi-shield"></i>PERSONAL BLOG
+			<i class="fa fa-newspaper-o" aria-hidden="true"></i>The press
 		</p>
 		<p class="footer-links">
-			<a href="/MyBlog/news">News</a> <a href="#">Search</a> <a href="/MyBlog/about">About</a> <a href="/MyBlog/contact">Contact</a>
+			<a href="#">News</a> <a href="#">Search</a> <a href="#">About</a> <a href="#">Contact</a>
 		</p>
 		<p class="copywrite">Copywrite not copywrite © 2017</p>
 	</div>
@@ -29,9 +29,9 @@
 		</ul>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 columns">
-		<p class="about">About Blog</p>
-		<p class="about subheader">A blog is a discussion or informational site published on the World Wide Web consisting of discrete entries
-			("posts") typically displayed in reverse chronological order.</p>
+		<p class="about">About SubPub</p>
+		<p class="about subheader">A SubPub is a service where you can subscribe yourself to one or more publications. You can search what you interested in.
+			Typically publications are displayed in reverse chronological order.</p>
 		<ul class="inline-list social no-bullet">
 			<li><a href="https://www.facebook.com/vjacheslav.butov" target="_blank"><i class="fa fa-facebook-official" aria-hidden="true"></i></a></li>
 			<li><a href="https://www.linkedin.com/in/viacheslav-butov-309182124" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>

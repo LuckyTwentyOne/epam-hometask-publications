@@ -8,15 +8,19 @@ public class Constants {
 	
 	public static final int MAX_SUBSCRIPTIONS_PER_HTML_PAGE = 5;
 	
+	public static final int MAX_ACCOUNTS_PER_HTML_PAGE = 15;
+	
 	public static final String CATEGORY_LIST = "CATEGORY_LIST";
 	
 	public static final String CURRENT_ACCOUNT = "CURRENT_ACCOUNT";
 	
-	public static final String SUCCESS_REDIRECT_URL_AFTER_SIGNIN = "SUCCESS_REDIRECT_URL_AFTER_SIGNIN";
-	
 	public static final String CURRENT_REQUEST_URL = "CURRENT_REQUEST_URL";
 	
 	public static final String SESSION_LOCALE = "SESSION_LOCALE";
+	
+	public static final String SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
+	
+	public static final String UNSUCCESS_MESSAGE = "UNSUCCESS_MESSAGE";
 	
 	public enum Cookie {
 		// 1 year ttl

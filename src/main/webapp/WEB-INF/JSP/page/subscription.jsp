@@ -17,10 +17,10 @@
 		<tbody>
 			<tr>
 				<td class="text-center">
-					<img src="/subpub/media/1358423120_gq.jpg" alt="publication-name" /><br>GO
+					<img src="${subscription.publication.imageLink }" alt="publication-name" /><br>${subscription.publication.name }
 				</td>
-				<td>10грн</td>
-				<td>06.06.2017</td>
+				<td>${subscription.publication.price }</td>
+				<td>${subscription.expirationDate}</td>
 			</tr>
 		</tbody>
 	</table>

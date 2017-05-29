@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ua.kh.butov.subpub.Constants;
 import ua.kh.butov.subpub.util.RoutingUtils;
 import ua.kh.butov.subpub.util.SessionUtils;
 import ua.kh.butov.subpub.util.UrlUtils;
@@ -34,7 +33,6 @@ public class CheckAuthentificationFilter extends AbstractFilter {
 				resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				resp.getWriter().println("401");
 			} else {
-				req.getSession().setAttribute(Constants.SUCCESS_REDIRECT_URL_AFTER_SIGNIN, requestUrl);
 				RoutingUtils.redirect("/subpub/sign-in", req, resp);
 			}
 		}
