@@ -11,6 +11,7 @@ import ua.kh.butov.subpub.form.LoginForm;
 import ua.kh.butov.subpub.model.CurrentAccount;
 import ua.kh.butov.subpub.model.SocialAccount;
 import ua.kh.butov.subpub.repository.AccountRepository;
+import ua.kh.butov.subpub.repository.AccountSubscriptionTotalRepository;
 import ua.kh.butov.subpub.repository.VoucherRepository;
 import ua.kh.butov.subpub.service.AccountService;
 
@@ -18,10 +19,12 @@ public class AccountServiceImpl implements AccountService {
 
 	private final AccountRepository accountRepository;
 	private final VoucherRepository vaucherRepository;
+	private final AccountSubscriptionTotalRepository accountSubscriptionTotalRepository;
 
 	public AccountServiceImpl(ServiceManager serviceManager) {
 		accountRepository = serviceManager.accountRepository;
 		vaucherRepository = serviceManager.vaucherRepository;
+		accountSubscriptionTotalRepository = serviceManager.accountSubscriptionTotalRepository;
 	}
 
 	@Override
@@ -76,7 +79,11 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	@Transactional
 	public List<Account> listAllAccounts(int page, int limit) {
-		return accountRepository.listAllAccounts(page, limit);
+		List<Account> result = accountRepository.listAllAccounts(page, limit);
+		for (Account a : result) {
+			a.setTotalSum(accountSubscriptionTotalRepository.getTotalSumForAccount(a.getId()));
+		}
+		return result;
 	}
 
 	@Override
@@ -84,7 +91,7 @@ public class AccountServiceImpl implements AccountService {
 	public int countAllAccounts() {
 		return accountRepository.countAllAccounts();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = false)
 	public void changeAccountStatus(int idAccount) {

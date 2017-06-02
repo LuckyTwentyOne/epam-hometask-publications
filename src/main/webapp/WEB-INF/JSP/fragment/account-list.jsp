@@ -7,7 +7,8 @@
 		<td>${account.lastName }&nbsp;${account.firstName }</td>
 		<td>${account.email }</td>
 		<td>${account.money }$</td>
-		<td>${account.role }</td>	
+		<td>${account.role }</td>
+		<td>${account.totalSum }</td>
 		<td><a href="/subpub/admin/active-status?idAccount=${account.id }">${account.active }</a></td>
 	</tr>
 </c:forEach>

@@ -11,6 +11,7 @@
 			<th>Email</th>
 			<th>Balance</th>
 			<th>Role</th>
+			<th>Total sum</th>
 			<th>Is active?</th>
 		</tr>
 	</thead>

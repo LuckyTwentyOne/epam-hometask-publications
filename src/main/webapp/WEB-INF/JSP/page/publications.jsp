@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib uri="mytags.tld" prefix="mytags"%>
 <c:choose>
 	<c:when test="${CURRENT_MESSAGE != null }">
 		<div class="alert alert-danger hidden-print" role="alert">${CURRENT_MESSAGE }</div>
@@ -16,7 +16,7 @@
 	</div>
 	<c:if test="${pageCount > 1 }">
 		<div class="text-center hidden-print">
-				 <a class="btn btn-success"	id="loadMorePublications" href="#">Load more publications</a>
+				 <a class="btn btn-success"	id="loadMorePublications" href="#"><mytags:message key="publications.loadMore"/></a>
 		</div>
 	</c:if>
 </div>

@@ -19,8 +19,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/subpub/switch"><mytags:message key="header.change-language"/></a></li> 
         <c:choose>
-        	<c:when test="${CURRENT_ACCOUNT == null and CURRENT_REQUEST_URL == '/subpub/sign-in'}">
-			</c:when>
+        	<c:when test="${CURRENT_ACCOUNT == null and CURRENT_REQUEST_URL == '/subpub/sign-in'}"></c:when>
 			<c:when test="${CURRENT_ACCOUNT != null and CURRENT_ACCOUNT.role=='reader'}">
 				<li><a><mytags:message key="header.user.info"/>&nbsp;${CURRENT_ACCOUNT.description }</a></li>
 				<li><a href="/subpub/my-subscriptions"><mytags:message key="header.my-subscriptions"/></a></li>
@@ -33,7 +32,7 @@
 				<li><a href="javascript:void(0);" class="post-request" data-url="/subpub/sign-out"><mytags:message key="header.sign-out"/></a></li>
 			</c:when>
 			<c:otherwise>
-			    <li><a class="sigh-in-btn">Sigh in</a></li>
+			    <li><a class="sigh-in-btn"><mytags:message key="sign-in.sign-in"/></a></li>
 			</c:otherwise>
         </c:choose>
       </ul>

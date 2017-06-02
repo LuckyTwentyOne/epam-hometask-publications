@@ -3,6 +3,7 @@ package ua.kh.butov.subpub.entity;
 import java.math.BigDecimal;
 
 import ua.kh.butov.subpub.annotation.jdbc.Column;
+import ua.kh.butov.subpub.annotation.jdbc.Transient;
 import ua.kh.butov.subpub.model.CurrentAccount;
 
 public class Account extends AbstractEntity<Integer> implements CurrentAccount {
@@ -17,6 +18,8 @@ public class Account extends AbstractEntity<Integer> implements CurrentAccount {
 	private String role;
 	private BigDecimal money;
 	private Boolean active;
+	@Transient
+	private BigDecimal totalSum;
 
 	public Account() {
 		money = BigDecimal.ZERO;
@@ -104,6 +107,14 @@ public class Account extends AbstractEntity<Integer> implements CurrentAccount {
 	
 	public Boolean getActive() {
 		return active;
+	}
+	
+	public BigDecimal getTotalSum() {
+		return totalSum;
+	}
+
+	public void setTotalSum(BigDecimal totalSum) {
+		this.totalSum = totalSum;
 	}
 
 	@Override

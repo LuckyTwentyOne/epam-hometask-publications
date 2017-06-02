@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.bind.ValidationException;
 
 import ua.kh.butov.subpub.annotation.jdbc.Transactional;
+import ua.kh.butov.subpub.entity.AccountSubscriptionTotal;
 import ua.kh.butov.subpub.entity.Publication;
 import ua.kh.butov.subpub.entity.Subscription;
 import ua.kh.butov.subpub.exception.AccessDeniedException;
@@ -17,6 +18,7 @@ import ua.kh.butov.subpub.factory.TransactionSynchronization;
 import ua.kh.butov.subpub.factory.TransactionSynchronizationManager;
 import ua.kh.butov.subpub.model.CurrentAccount;
 import ua.kh.butov.subpub.repository.AccountRepository;
+import ua.kh.butov.subpub.repository.AccountSubscriptionTotalRepository;
 import ua.kh.butov.subpub.repository.PublicationRepository;
 import ua.kh.butov.subpub.repository.SubscriptionRepository;
 import ua.kh.butov.subpub.service.NotificationContentBuilderService;
@@ -28,6 +30,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	private final PublicationRepository publicationRepository;
 	private final SubscriptionRepository subscriptionRepository;
 	private final AccountRepository accountRepository;
+	private final AccountSubscriptionTotalRepository accountSubscriptionTotalRepository;
 	private final NotificationService notificationService;
 	private final NotificationContentBuilderService notificationContentBuilderService;
 
@@ -35,6 +38,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		publicationRepository = serviceManager.publicationRepository;
 		subscriptionRepository = serviceManager.subscriptionRepository;
 		accountRepository = serviceManager.accountRepository;
+		accountSubscriptionTotalRepository= serviceManager.accountSubscriptionTotalRepository;
 		notificationService = serviceManager.getNotificationService();
 		notificationContentBuilderService = serviceManager.getNotificationContentBuilderService();
 	}
@@ -59,6 +63,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		accountRepository.updateAccountBalance(restAccountBalance, account.getId());
 		Subscription result = new Subscription(account.getId(), calculateExpirationDate(numberOfMonthes), publication.getId());
 		subscriptionRepository.createNewSubscription(result);
+		AccountSubscriptionTotal accountSubscriptionTotal = accountSubscriptionTotalRepository.findByIdSubscription(result.getId());
+		if(accountSubscriptionTotal==null){
+			accountSubscriptionTotalRepository.addNewAccountSubscriptionStatistic(new AccountSubscriptionTotal(account.getId(), totalSum, result.getId()));
+		}else{
+			BigDecimal newSum = accountSubscriptionTotal.getTotalSum().add(totalSum);
+			accountSubscriptionTotalRepository.updateAccountSubscriptionStatistic(new AccountSubscriptionTotal(account.getId(), newSum, result.getId()));
+		}
 		account.setMoney(restAccountBalance);
 		TransactionSynchronizationManager.addSynchronization(new TransactionSynchronization() {	
 			@Override

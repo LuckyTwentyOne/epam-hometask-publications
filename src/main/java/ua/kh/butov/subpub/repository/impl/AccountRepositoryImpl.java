@@ -56,7 +56,7 @@ public class AccountRepositoryImpl implements AccountRepository {
 	public List<Account> listAllAccounts(int page, int limit) {
 		int offset = (page - 1) * limit;
 		return JDBCUtils.select(JDBCConnectionUtils.getCurrentConnection(),
-				"select a.*, r.name as role from account a, role r where a.id_role=r.id order by a.id limit ? offset ?",
+				"select a.*, r.name as role from account a, role r where a.id_role=r.id and r.id =1 order by a.id limit ? offset ?",
 				accountsResultSetHandler, limit , offset);
 	}
 

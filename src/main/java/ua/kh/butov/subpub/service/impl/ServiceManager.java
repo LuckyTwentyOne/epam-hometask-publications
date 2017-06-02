@@ -13,11 +13,13 @@ import org.slf4j.LoggerFactory;
 
 import ua.kh.butov.subpub.factory.JDBCTransactionalServiceFactory;
 import ua.kh.butov.subpub.repository.AccountRepository;
+import ua.kh.butov.subpub.repository.AccountSubscriptionTotalRepository;
 import ua.kh.butov.subpub.repository.CategoryRepository;
 import ua.kh.butov.subpub.repository.PublicationRepository;
 import ua.kh.butov.subpub.repository.SubscriptionRepository;
 import ua.kh.butov.subpub.repository.VoucherRepository;
 import ua.kh.butov.subpub.repository.impl.AccountRepositoryImpl;
+import ua.kh.butov.subpub.repository.impl.AccountSubscriptionTotalRepositoryImpl;
 import ua.kh.butov.subpub.repository.impl.CategoryRepositoryImpl;
 import ua.kh.butov.subpub.repository.impl.PublicationRepositoryImpl;
 import ua.kh.butov.subpub.repository.impl.SubscriptionRepositoryImpl;
@@ -85,6 +87,7 @@ public class ServiceManager {
 	final SubscriptionRepository subscriptionRepository;
 	final AccountRepository accountRepository;
 	final VoucherRepository vaucherRepository;
+	final AccountSubscriptionTotalRepository accountSubscriptionTotalRepository;
 
 	private ServiceManager(ServletContext context) {
 		loadApplicationProperties();
@@ -97,6 +100,7 @@ public class ServiceManager {
 		subscriptionRepository = new SubscriptionRepositoryImpl();
 		accountRepository = new AccountRepositoryImpl();
 		vaucherRepository = new VoucherRepositoryImpl();
+		accountSubscriptionTotalRepository = new AccountSubscriptionTotalRepositoryImpl();
 		publicationService = (PublicationService) JDBCTransactionalServiceFactory.createTransactionalService(dataSource,
 				new PublicationServiceImpl(this));
 		subscriptionService = (SubscriptionService) JDBCTransactionalServiceFactory

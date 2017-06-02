@@ -18,10 +18,10 @@
 		    <h4 class="name">${p.name }</h4>
 		    <div class="conditions hidden">${p.conditions }</div>
 		    <div class="price hidden">${p.price }</div>		
-			<div class="category">Category: <span class="category-name">${p.category }</span></div>	
+			<div class="category"><mytags:message key="publications.category"/> <span class="category-name">${p.category }</span></div>	
 			<c:choose>
 				<c:when test="${CURRENT_ACCOUNT.role=='reader' or CURRENT_ACCOUNT==null }">
-					<a class="btn btn-primary btn-block buy-btn" data-id-publication="${p.id }">Subscribe</a>
+					<a class="btn btn-primary btn-block buy-btn" data-id-publication="${p.id }"><mytags:message key="publications.subscribe"/></a>
 				</c:when>
 				<c:when test="${CURRENT_ACCOUNT.role=='admin' }">
 					<div class="text-center">
